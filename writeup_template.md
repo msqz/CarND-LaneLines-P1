@@ -15,7 +15,16 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
+[image1]: ./writeup_images/1_standardized.jpg "Standardized"
+[image2]: ./writeup_images/2_boosted_yellow.jpg "Boosted yellow"
+[image3]: ./writeup_images/3_gray.jpg "Grayscale"
+[image4]: ./writeup_images/4_boosted_contrast.jpg "Boosted contrast"
+[image5]: ./writeup_images/5_blurred.jpg "Blurred"
+[image6]: ./writeup_images/6_edges.jpg "Edges"
+[image7]: ./writeup_images/7_region.jpg "Region"
+[image8]: ./writeup_images/8_lines.jpg "Lines"
+[image9]: ./writeup_images/9_weighted.jpg "Weighted"
+
 
 ---
 

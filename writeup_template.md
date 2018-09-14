@@ -1,13 +1,5 @@
 # **Finding Lane Lines on the Road** 
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Finding Lane Lines on the Road**
-
 The goals / steps of this project are the following:
 * Make a pipeline that finds lane lines on the road
 * Reflect on your work in a written report
@@ -28,29 +20,74 @@ The goals / steps of this project are the following:
 
 ---
 
-### Reflection
+## Reflection
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+### The pipeline
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+The pipeline contains following steps:
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+*(each step is illustrated with a result image)*
+#### 1. Standardization 
+`standardize()` - it resized all images to be 960x540 px. That way the pipeline can handle also the challenge video.
 
 ![alt text][image1]
 
+#### 2. Boosting yellows
+`boost_yellow()` - it transforms yellow parts of the image to be plain white, so they have max brightness. Thanks to that the edge detecton of the yellow line is easier, especially if it's in poor lighting.
 
-### 2. Identify potential shortcomings with your current pipeline
+![alt text][image2]
+
+#### 3. Converting to grayscale
+`grayscale()` - here the image is converted to grayscale.
+
+![alt text][image3]
 
 
-One potential shortcoming would be what would happen when ... 
+#### 4. Boosting contrast
+`boost_contrast()` - A simple contrast increasing happens here. Everything above specified brightness becomes white (max brightness) and everything below gets darkened. That way the edge detection step
 
-Another shortcoming could be ...
+![alt text][image4]
+
+#### 5. Blurring
+`gaussian_blur()` - the gradients get smoothed here, so the edge detection algorithm can perform better
+
+![alt text][image5]
+
+#### 6. Edges detection
+`edges()` - The edges are extracted here, using Canny edge detector
+
+![alt text][image6]
+
+#### 7. Cropping the area
+`region_of_interest()` - the image is cropped to cover only the area where lanes may be contained. There botton 100px is removed, to cut off the noise 
+
+![alt text][image7]
+
+#### 8. Lines detection
+`lines()` - Lines are detected using Probabilistic Hough Transform. Those lines are processed by the `draw_lines()` function (described later) and new layer is created.
+
+![alt text][image8]
+
+#### 9. Merging lines with original image
+`weighted()` - Lines layer is applied to the standardized image.
+
+![alt text][image9]
 
 
-### 3. Suggest possible improvements to your pipeline
+### The `draw_lines()` function
+---
+There are 3 modifications applied:
+1. Distinction between left and right side
 
-A possible improvement would be to ...
+2. Calculation of the average slopes for each side.
 
-Another potential improvement could be to ...
+3. Extrapolation to the top and bottom of lane. It's done by calculating x-intercept points and drawing averaged slope from that points.
+
+### Potential shortcomings of current pipeline
+---
+When the dashed lane is not very dense (i.e. lines are short or there is a large distance between them), generated line might be distorted by noise.
+
+### Posible improvements to pipeline
+---
+
+Covering more broad area (cropping wider region) could allow to detect lanes apart from the spacing between them. That would allow to use videos generated from different angles (vertical).
